@@ -1,0 +1,29 @@
+
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+  {% if messages %}
+  <div class="alert alert-info" role="alert">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Log In</legend>
+      {{form}}
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-outline-info" type="submit">Sign In</button>
+    </div>
+  </form>
+  <div class="border-top pt-3">
+    <small class="text-muted">Need an Account?
+      <a class="ml-2" href="{% url 'register' %}">Create an Account</a>
+    </small>
+  </div>
+</div>
+{% endblock content %}
