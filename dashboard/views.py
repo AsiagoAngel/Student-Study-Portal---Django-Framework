@@ -6,14 +6,11 @@ from django.views import generic
 import requests
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm 
 from django.contrib.auth.decorators import login_required
-import wikipediaapi
 from . forms import *
 # Create your views here.
 def home(request):
     return render(request, 'dashboard/home.html')
 
-
-# ------------  Notes  Section  ------------------#
 @login_required
 def notes(request):
     if request.method == "POST":
@@ -29,12 +26,10 @@ def notes(request):
     return render(request, 'dashboard/notes.html', context)
 
 
-
 @login_required
 def delete_note(request, pk=None):
     Notes.objects.get(id=pk).delete()
     return redirect("notes")
-
 
 class NotesDetailView(generic.DetailView):
     model = Notes
@@ -114,7 +109,6 @@ def delete_homework(request, pk=None):
     Homework.objects.get(id=pk).delete()
     return redirect("homework")
 
-# -------- To Do Section ------------ #
 @login_required
 def todo(request):
     if request.method == "POST":
@@ -149,7 +143,6 @@ def todo(request):
     }
     return render(request, 'dashboard/todo.html', context)
 
-
 @login_required
 def update_todo(request, pk=None):
     todo = Todo.objects.get(id=pk)
@@ -160,14 +153,10 @@ def update_todo(request, pk=None):
     todo.save()
     return redirect('todo')
 
-
 @login_required
 def delete_todo(request, pk=None):
     Todo.objects.get(id=pk).delete()
     return redirect("todo")
-
-
-# -------- BOOK Section ------------ #
 
 def books(request):
     if request.method == "POST":
@@ -185,7 +174,7 @@ def books(request):
                 'count': answer['items'][i]['volumeInfo'].get('pageCount'),
                 'categories': answer['items'][i]['volumeInfo'].get('categories'),
                 'rating': answer['items'][i]['volumeInfo'].get('pageRatting'),
-                'thumbnail': answer['items'][i]['volumeInfo'].get('imageLinks').get('thumbnail'),
+                'thumbnail': answer['items'][i]['volumeInfo'].get('imageLinks'),
                 'preview': answer['items'][i]['volumeInfo'].get('previewLink'),
             }
             result_list.append(result_dict)
@@ -199,84 +188,6 @@ def books(request):
         form = DashboardForm()
     context = {'form': form}
     return render(request, 'dashboard/books.html', context)
-
-
-# -------- Dictionary Section ------------ #
-
-def dictionary(request):
-    if request.method == 'POST':
-        form = DashboardForm(request.POST)
-        text = request.POST['text']
-        url = "https://api.dictionaryapi.dev/api/v2/entries/en_US/" + text
-        r = requests.get(url)
-        answer = r.json()
-        try:
-            phonetics = answer[0]['phonetics'][0]['text']
-            audio = answer[0]['phonetics'][0]['audio']
-            definition = answer[0]['meanings'][0]['definitions'][0]['definition']
-            example = answer[0]['meanings'][0]['definitions'][0]['example']
-            synonyms = answer[0]['meanings'][0]['definitions'][0]['synonyms']
-            context = {
-                'form': form,
-                'input': text,
-                'phonetics': phonetics,
-                'audio': audio,
-                'definition': definition,
-                'example': example,
-                'synonyms': synonyms
-            }
-        except:
-            context = {
-                'form': form,
-                'input': ''
-            }
-        return render(request, 'dashboard/dictionary.html', context)
-    else:
-        form = DashboardForm()
-        context = {'form': form}
-    return render(request, 'dashboard/dictionary.html', context)
-
-
-# -------- Wikipedia Section ------------ #
-
-import wikipediaapi
-
-def wiki(request):
-    if request.method == "POST":
-        text = request.POST['text']
-        form = DashboardForm(request.POST)
-
-        # Create an instance of wikipediaapi with a custom User-Agent
-        wiki_wiki = wikipediaapi.Wikipedia(
-            language='en',
-            extract_format=wikipediaapi.ExtractFormat.WIKI,
-            user_agent='YourAppName/1.0 (https://yourwebsite.com/) Contact at your-email@example.com'
-        )
-
-        # Fetch the page
-        page = wikipediaapi.page(text)
-
-        # Check if the page exists
-        if page.exists():
-            context = {
-                'form': form,
-                'title': page.title,
-                'link': page.fullurl,
-                'details': page.summary
-            }
-        else:
-            context = {
-                'form': form,
-                'message': 'No page found for the given search term.'
-            }
-
-        return render(request, "dashboard/wiki.html", context)
-    else:
-        form = DashboardForm()
-        context = {'form': form}
-    return render(request, "dashboard/wiki.html", context)
-
-# -------- Login Section ------------ #
 
 def register(request):
     if request.method == "POST":
@@ -292,9 +203,6 @@ def register(request):
         'form': form,
     }
     return render(request,"dashboard/register.html", context)
-
-
-# -------- Login Section ------------#
 @login_required
 def profile(request):
     homework = Homework.objects.filter(is_finished=False, user=request.user)
@@ -312,7 +220,6 @@ def profile(request):
         'todo': todo,
         'homework_done': homework_done,
         'todos_done': todos_done,
-
     }
     return render(request, 'dashboard/profile.html', context)
 
@@ -320,7 +227,6 @@ def profile(request):
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib import messages
-
 def custom_login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -337,7 +243,6 @@ def custom_login_view(request):
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib import messages
-
 def custom_logout(request):
     logout(request)
     messages.success(request, 'You have successfully logged out!')

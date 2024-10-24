@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +13,6 @@
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
   <link rel="stylesheet" href="{% static 'css/main.css' %}" />
 </head>
-
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,17 +37,12 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'books' %}">Books</a>
-                <a class="dropdown-item" href="{% url 'wiki' %}">Wikipedia</a>
                 <div class="dropdown-divider"></div>
-
-                <a class="dropdown-item" href="{% url 'dictionary' %}">Dictionary</a>
-                <a class="dropdown-item" href="{% url 'youtube' %}">Youtube</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'todo' %}">To-do</a>
                 <a class="dropdown-item" href="{% url 'homework' %}">Homework</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'notes' %}">Notes</a>
-                <a class="dropdown-item" href="{% url 'conversion' %}">Conversion</a>
                 <div class="dropdown-divider"></div>
               </div>
             </li>
@@ -79,10 +71,8 @@
     <div class ="alert alert-{{msg.tags}}">{{msg}}</div>
     {% endfor %}
     {% endif %}
-
     {% block content %}
     {% endblock content %}
-
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -92,5 +82,4 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
 </body>
-
 </html>

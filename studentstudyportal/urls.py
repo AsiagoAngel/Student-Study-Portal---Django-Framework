@@ -27,5 +27,5 @@ urlpatterns = [
     path('profile/', dash_views.profile, name="profile"),
     path('logout/', auth_views.LogoutView.as_view(template_name="dashboard/logout.html"), name="logout"),
 ]
-  # Make sure to import your custom_login view
+
 
